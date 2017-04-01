@@ -20,6 +20,11 @@ class Plugin extends Base
         $this->template->hook->attach('template:project:dropdown', 'Calendar:project/dropdown');
         $this->template->hook->attach('template:project-header:view-switcher', 'Calendar:project_header/views');
         $this->template->hook->attach('template:config:sidebar', 'Calendar:config/sidebar');
+
+        $this->hook->on('template:layout:css', array('template' => 'plugins/Calendar/Assets/fullcalendar.min.css'));
+        $this->hook->on('template:layout:js', array('template' => 'plugins/Calendar/Assets/moment.min.js'));
+        $this->hook->on('template:layout:js', array('template' => 'plugins/Calendar/Assets/fullcalendar.min.js'));
+        $this->hook->on('template:layout:js', array('template' => 'plugins/Calendar/Assets/calendar.js'));
     }
 
     public function onStartup()
