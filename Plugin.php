@@ -57,5 +57,10 @@ class Plugin extends Base
     {
         return 'https://github.com/kanboard/plugin-calendar';
     }
+
+    public function getCompatibleVersion()
+    {
+        return '>=1.0.42';
+    }
 }
 
