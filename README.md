@@ -12,7 +12,7 @@ Author
 Requirements
 ------------
 
-- Kanboard >= 1.0.42
+- Kanboard >= 1.0.44
 
 Installation
 ------------
@@ -24,3 +24,4 @@ You have the choice between 3 methods:
 3. Clone this repository into the folder `plugins/Calendar`
 
 Note: Plugin folder is case-sensitive.
+
