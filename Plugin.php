@@ -4,6 +4,7 @@ namespace Kanboard\Plugin\Calendar;
 
 use Kanboard\Core\Plugin\Base;
 use Kanboard\Core\Translator;
+use Kanboard\Plugin\Calendar\Formatter\ProjectApiFormatter;
 use Kanboard\Plugin\Calendar\Formatter\TaskCalendarFormatter;
 
 class Plugin extends Base
@@ -14,6 +15,10 @@ class Plugin extends Base
 
         $this->container['taskCalendarFormatter'] = $this->container->factory(function ($c) {
             return new TaskCalendarFormatter($c);
+        });
+
+        $this->container['projectApiFormatter'] = $this->container->factory(function ($c) {
+            return new ProjectApiFormatter($c);
         });
 
         $this->template->hook->attach('template:dashboard:page-header:menu', 'Calendar:dashboard/menu');
