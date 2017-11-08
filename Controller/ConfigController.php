@@ -19,7 +19,6 @@ class ConfigController extends \Kanboard\Controller\ConfigController
     public function save()
     {
         $values =  $this->request->getValues();
-        $values += array('calendar_user_subtasks_time_tracking' => 0);
 
         if ($this->configModel->save($values)) {
             $this->flash->success(t('Settings saved successfully.'));

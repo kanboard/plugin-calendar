@@ -25,11 +25,6 @@
         ) ?>
     </fieldset>
 
-    <fieldset>
-        <legend><?= t('Subtasks time tracking') ?></legend>
-        <?= $this->form->checkbox('calendar_user_subtasks_time_tracking', t('Show subtasks based on the time tracking'), 1, $values['calendar_user_subtasks_time_tracking'] == 1) ?>
-    </fieldset>
-
     <div class="form-actions">
         <button type="submit" class="btn btn-blue"><?= t('Save') ?></button>
     </div>
