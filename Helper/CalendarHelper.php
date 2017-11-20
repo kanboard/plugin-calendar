@@ -19,11 +19,12 @@ class CalendarHelper extends Base
      * @param  string $saveUrl
      * @return string
      */
-    public function render($checkUrl, $saveUrl)
+    public function render($checkUrl, $saveUrl, $addUrl )
     {
         $params = array(
             'checkUrl' => $checkUrl,
             'saveUrl' => $saveUrl,
+            'addUrl' => $addUrl
         );
 
         return '<div class="js-calendar" data-params=\''.json_encode($params, JSON_HEX_APOS).'\'></div>';

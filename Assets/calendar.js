@@ -23,6 +23,10 @@ KB.component('calendar', function (containerElement, options) {
                 center: 'title',
                 right: 'month,agendaWeek,agendaDay'
             },
+            dayClick: function(date, jsEvent, view) {
+                var timestamp = moment( date.format() ).unix();
+                KB.modal.open(options.addUrl + "&date_started=" + timestamp + "&date_due=" +  timestamp ,"large",!1);               
+            },
             eventDrop: function(event) {
                 $.ajax({
                     cache: false,
