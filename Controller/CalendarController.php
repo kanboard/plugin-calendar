@@ -119,6 +119,52 @@ class CalendarController extends BaseController
         }
     }
 
+    public function showTaskCreation(array $values = array(), array $errors = array())
+    {
+        $project = $this->getProject();
+        $swimlanesList = $this->swimlaneModel->getList($project['id'], false, true);
+        $values += $this->prepareValues($project['is_private'], $swimlanesList);
+
+        $values = $this->hook->merge('controller:task:form:default', $values, array('default_values' => $values));
+        $values = $this->hook->merge('controller:task-creation:form:default', $values, array('default_values' => $values));
+
+        $values['date_started'] = $this->request->getIntegerParam('date_started');
+        $values['date_due'] = $this->request->getIntegerParam('date_due');
+
+        $this->response->html($this->template->render('task_creation/show', array(
+            'project' => $project,
+            'errors' => $errors,
+            'values' => $values + array('project_id' => $project['id']),
+            'columns_list' => $this->columnModel->getList($project['id']),
+            'users_list' => $this->projectUserRoleModel->getAssignableUsersList($project['id'], true, false, $project['is_private'] == 1),
+            'categories_list' => $this->categoryModel->getList($project['id']),
+            'swimlanes_list' => $swimlanesList,
+        )));
+    }
+        
+    /**
+     * Prepare form values
+     *
+     * @access protected
+     * @param  bool  $isPrivateProject
+     * @param  array $swimlanesList
+     * @return array
+     */
+    protected function prepareValues($isPrivateProject, array $swimlanesList)
+    {
+        $values = array(
+            'swimlane_id' => $this->request->getIntegerParam('swimlane_id', key($swimlanesList)),
+            'column_id'   => $this->request->getIntegerParam('column_id'),
+            'color_id'    => $this->colorModel->getDefaultColor(),
+        );
+
+        if ($isPrivateProject) {
+            $values['owner_id'] = $this->userSession->getId();
+        }
+
+        return $values;
+    }
+
     protected function getConditionForTasksWithStartAndDueDate($startTime, $endTime, $startColumn, $endColumn)
     {
         $startTime = strtotime($startTime);

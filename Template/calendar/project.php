@@ -3,5 +3,5 @@
 <?= $this->calendar->render(
     $this->url->href('CalendarController', 'projectEvents', array('project_id' => $project['id'], 'plugin' => 'Calendar')),
     $this->url->href('CalendarController', 'save', array('project_id' => $project['id'], 'plugin' => 'Calendar')),
-    $this->url->href('TaskCreationController', 'show', array('project_id' => $project['id']))
+    $this->url->href('CalendarController', 'showTaskCreation', array('project_id' => $project['id'], 'plugin' => 'Calendar'))
 ) ?>
