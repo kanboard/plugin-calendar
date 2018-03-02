@@ -23,25 +23,35 @@ class TaskCalendarFormatter extends BaseFormatter implements FormatterInterface
     protected $startColumn = '';
 
     /**
-     * Column used for event end date
+     * Column used for event expected end date
      *
      * @access protected
      * @var string
      */
-    protected $endColumn = '';
+    protected $expectedEndColumn = '';
+
+    /**
+     * Column used for event effective end date
+     *
+     * @access protected
+     * @var string
+     */
+    protected $effectiveEndColumn = '';
 
     /**
      * Transform results to calendar events
      *
      * @access public
-     * @param  string  $start_column    Column name for the start date
-     * @param  string  $end_column      Column name for the end date
+     * @param  string  $start_column            Column name for the start date
+     * @param  string  $expected_end_column     Column name for the expected end date
+     * @param  string  $effective_end_column    Column name for the effective end date
      * @return $this
      */
-    public function setColumns($start_column, $end_column = '')
+    public function setColumns($start_column, $expected_end_column = '', $effective_end_column = '')
     {
         $this->startColumn = $start_column;
-        $this->endColumn = $end_column ?: $start_column;
+        $this->expectedEndColumn = $expected_end_column ?: $start_column;
+        $this->effectiveEndColumn = $effective_end_column ?: $this->expectedEndColumn;
         return $this;
     }
 
@@ -60,8 +70,14 @@ class TaskCalendarFormatter extends BaseFormatter implements FormatterInterface
             $startDate->setTimestamp($task[$this->startColumn]);
 
             $endDate = new DateTime();
-            if (! empty($task[$this->endColumn])) {
-                $endDate->setTimestamp($task[$this->endColumn]);
+            if (! empty($task[$this->expectedEndColumn])) {
+                $endDate->setTimestamp($task[$this->expectedEndColumn]);
+            }
+
+            if ($this->expectedEndColumn != $this->effectiveEndColumn &&
+                ! empty($task[$this->effectiveEndColumn]) &&
+                $task[$this->effectiveEndColumn] != $task[$this->expectedEndColumn]) {
+                $endDate->setTimestamp($task[$this->effectiveEndColumn]);
             }
 
             $allDay = $startDate == $endDate && $endDate->format('Hi') == '0000';

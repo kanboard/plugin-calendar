@@ -56,10 +56,10 @@ class CalendarController extends BaseController
 
         $startAndDueDateQueryBuilder
             ->getQuery()
-            ->addCondition($this->getConditionForTasksWithStartAndDueDate($startRange, $endRange, $startColumn, 'date_due'));
+            ->addCondition($this->getConditionForTasksWithStartAndDueDate($startRange, $endRange, $startColumn, 'date_due', 'date_completed'));
 
         $startAndDueDateEvents = $startAndDueDateQueryBuilder
-            ->format($this->taskCalendarFormatter->setColumns($startColumn, 'date_due'));
+            ->format($this->taskCalendarFormatter->setColumns($startColumn, 'date_due', 'date_completed'));
 
         $events = array_merge($dueDateOnlyEvents, $startAndDueDateEvents);
 
@@ -91,10 +91,10 @@ class CalendarController extends BaseController
 
         $startAndDueDateQueryBuilder
             ->getQuery()
-            ->addCondition($this->getConditionForTasksWithStartAndDueDate($startRange, $endRange, $startColumn, 'date_due'));
+            ->addCondition($this->getConditionForTasksWithStartAndDueDate($startRange, $endRange, $startColumn, 'date_due', 'date_completed'));
 
         $startAndDueDateEvents = $startAndDueDateQueryBuilder
-            ->format($this->taskCalendarFormatter->setColumns($startColumn, 'date_due'));
+            ->format($this->taskCalendarFormatter->setColumns($startColumn, 'date_due', 'date_completed'));
 
         $events = array_merge($dueDateOnlyEvents, $startAndDueDateEvents);
 
@@ -119,17 +119,18 @@ class CalendarController extends BaseController
         }
     }
 
-    protected function getConditionForTasksWithStartAndDueDate($startTime, $endTime, $startColumn, $endColumn)
+    protected function getConditionForTasksWithStartAndDueDate($startTime, $endTime, $startColumn, $expectedEndColumn, $effectiveEndColumn)
     {
         $startTime = strtotime($startTime);
         $endTime = strtotime($endTime);
         $startColumn = $this->db->escapeIdentifier($startColumn);
-        $endColumn = $this->db->escapeIdentifier($endColumn);
+        $expectedEndColumn = $this->db->escapeIdentifier($expectedEndColumn);
+        $effectiveEndColumn = $this->db->escapeIdentifier($effectiveEndColumn);
 
         $conditions = array(
             "($startColumn >= '$startTime' AND $startColumn <= '$endTime')",
-            "($startColumn <= '$startTime' AND $endColumn >= '$startTime')",
-            "($startColumn <= '$startTime' AND ($endColumn = '0' OR $endColumn IS NULL))",
+            "($startColumn <= '$startTime' AND ($expectedEndColumn >= '$startTime' OR $effectiveEndColumn >= '$startTime'))",
+            "($startColumn <= '$startTime' AND ($expectedEndColumn = '0' OR $expectedEndColumn IS NULL) AND ($effectiveEndColumn = '0' OR $effectiveEndColumn IS NULL))",
         );
 
         return $startColumn.' IS NOT NULL AND '.$startColumn.' > 0 AND ('.implode(' OR ', $conditions).')';
