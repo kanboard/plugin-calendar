@@ -93,7 +93,7 @@ class TaskCalendarFormatter extends BaseFormatter implements FormatterInterface
                 'url' => $this->helper->url->to('TaskViewController', 'show', array('task_id' => $task['id'], 'project_id' => $task['project_id'])),
                 'start' => $startDate->format($format),
                 'end' => $endDate->format($format),
-                'editable' => $allDay,
+                'editable' => true,
                 'allday' => $allDay,
             );
         }
