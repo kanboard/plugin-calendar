@@ -56,8 +56,6 @@ KB.component('calendar', function (containerElement, options) {
                     processData: false,
                     data: JSON.stringify(droppedEvent, replacer)
                 });
-
-                });
             },
             viewRender: function(view) {
                 // Map view.name back and update location.hash
