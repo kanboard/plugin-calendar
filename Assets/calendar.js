@@ -14,7 +14,7 @@ KB.component('calendar', function (containerElement, options) {
         }
 
         calendar.fullCalendar({
-            locale: $("body").data("js-lang"),
+            locale: $("html").attr('lang'),
             editable: true,
             eventLimit: true,
             defaultView: mode,
